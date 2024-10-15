@@ -8,3 +8,6 @@ seaborn
 jupyter
 pandas
 torch_geometric
+tensorboardX
+einops
+networkx
