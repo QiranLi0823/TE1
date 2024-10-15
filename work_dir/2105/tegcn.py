@@ -725,16 +725,10 @@ class Model2(nn.Module):
         # N*M,C,T,V
         c_new = x.size(1)
         #x = x.view(N, M, c_new, -1)
-        
-        print("<reshape1> x.shape:{}".format(x.shape))
         x = x.reshape(N, M, c_new, -1)
-        print("<reshape2> x.shape:{}".format(x.shape))
-        
         x = x.mean(3).mean(1)
         x = self.drop_out(x)
         x = self.fc(x)
-        
-        exit()
 
         return x
         #if cls_token is not None:

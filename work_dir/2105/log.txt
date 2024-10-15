@@ -1,0 +1,26 @@
+[ Tue Oct 15 16:41:05 2024 ] using warm up, epoch: 5
+[ Tue Oct 15 16:41:05 2024 ] Parameters:
+{'work_dir': 'work_dir/2105', 'model_saved_name': 'runs/2105', 'config': './config/uav-cross-subjectv2/train.yaml', 'phase': 'train', 'save_score': True, 'seed': 777, 'log_interval': 100, 'save_interval': 1, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': './data/train_joint.npy', 'label_path': './data/train_label.npy', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': -1, 'normalization': False}, 'test_feeder_args': {'data_path': './data/test_A_joint.npy', 'label_path': './data/test_A_label.npy'}, 'model': 'model.tegcn.Model2', 'model_args': {'num_class': 155, 'num_point': 17, 'num_person': 2, 'graph': 'graph.uav.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'label_smoothing': 0.0, 'ignore_weights': [], 'base_lr': 0.1, 'step': [30, 40], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 32, 'test_batch_size': 32, 'start_epoch': 0, 'num_epoch': 50, 'weight_decay': 0.0001, 'only_train_part': False, 'only_train_epoch': 100, 'warm_up_epoch': 5}
+
+[ Tue Oct 15 16:41:05 2024 ] Training epoch: 1
+[ Tue Oct 15 16:46:02 2024 ] 	Mean training loss: 4.6534.
+[ Tue Oct 15 16:46:02 2024 ] 	Time consumption: [Data]01%, [Network]99%
+[ Tue Oct 15 16:46:02 2024 ] Eval epoch: 1
+[ Tue Oct 15 16:46:16 2024 ] 	Mean test loss of 63 batches: 4.288365697103833.
+[ Tue Oct 15 16:46:16 2024 ] 	Top1: 4.00%
+[ Tue Oct 15 16:46:16 2024 ] 	Top5: 15.65%
+[ Tue Oct 15 16:46:16 2024 ] Training epoch: 2
+[ Tue Oct 15 16:51:08 2024 ] 	Mean training loss: 4.2140.
+[ Tue Oct 15 16:51:08 2024 ] 	Time consumption: [Data]01%, [Network]99%
+[ Tue Oct 15 16:51:08 2024 ] Eval epoch: 2
+[ Tue Oct 15 16:51:19 2024 ] 	Mean test loss of 63 batches: 3.6642559672158863.
+[ Tue Oct 15 16:51:19 2024 ] 	Top1: 8.90%
+[ Tue Oct 15 16:51:19 2024 ] 	Top5: 33.50%
+[ Tue Oct 15 16:51:19 2024 ] Training epoch: 3
+[ Tue Oct 15 16:56:14 2024 ] 	Mean training loss: 3.7023.
+[ Tue Oct 15 16:56:14 2024 ] 	Time consumption: [Data]01%, [Network]99%
+[ Tue Oct 15 16:56:14 2024 ] Eval epoch: 3
+[ Tue Oct 15 16:56:28 2024 ] 	Mean test loss of 63 batches: 3.070266996111189.
+[ Tue Oct 15 16:56:28 2024 ] 	Top1: 17.20%
+[ Tue Oct 15 16:56:28 2024 ] 	Top5: 51.65%
+[ Tue Oct 15 16:56:28 2024 ] Training epoch: 4
