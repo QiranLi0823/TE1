@@ -635,6 +635,45 @@ class Model(nn.Module):
             #return z
         #else:
             #return x
+
+'''
+    feature.shape<in> [batch, joins, xyz-loction + time]
+    feature.shape<out> [batch, joins]
+    pro [joins, xyz-loction_time]
+'''
+class GCN_back_MLP(nn.Module):
+    def __init__(self, dim=17, in_channels=128, h1=32, h2=64, out_channels=32):
+        super(GCN_back_MLP, self).__init__()
+        self.layers = nn.Sequential(
+                nn.Linear(in_channels, 1),
+                nn.Linear(dim, h1), nn.ReLU(),
+                nn.Linear(h1, h2), nn.ReLU(),
+                nn.Linear(h2, out_channels), nn.ReLU()
+            )
+    
+    def forward(self, x):
+        x = self.layers[0](x).view(x.shape[0], x.shape[1])
+        x = self.layers[1:](x)
+        return x
+    
+'''
+    feature.shape<in> [batch, joins], [batch, joins]
+    feature.shape<out> [batch, label]
+'''
+class Output_Decoder(nn.Module):
+    def __init__(self, in_channels=1, out_channels=1, class_num=155, h1=32, h2=64):
+        super(Output_Decoder, self).__init__()
+        self.layers = nn.Sequential(
+            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=(2, 2), padding=(0, 0)),
+            nn.Linear(h1-1, h2),
+            nn.Linear(h2, class_num)
+        )
+    
+    def forward(self, x1, x2):
+        x = torch.stack((x1, x2), dim=2).unsqueeze(1)
+        x = self.layers[0](x).squeeze(-1).squeeze(1)
+        x = self.layers[1:](x)
+        return x
             
 class Model2(nn.Module):
     def __init__(self, num_class=60, num_point=25, num_person=2, graph=None, graph_args=dict(), in_channels=3,
@@ -688,7 +727,29 @@ class Model2(nn.Module):
             #nn.Dropout(self.mlp_drop),
             #nn.Linear(self.mlp_dim, num_class)
         #)
-
+        
+        self._fc1 = nn.Linear(19200, 512)
+        self._fc1_2 = GCN_back_MLP(
+            dim=17, 
+            in_channels=512, 
+            h1= 64,
+            h2= 128,
+            out_channels= 64,
+        )
+        self._fc2 = nn.Linear(19200, 512)
+        self._fc2_2 = GCN_back_MLP(
+            dim=17, 
+            in_channels=512, 
+            h1= 64,
+            h2= 128,
+            out_channels= 64,
+        )
+        
+        self.output_decoder = Output_Decoder(
+            class_num=155, 
+            h1=64, 
+            h2=128
+        )
 
     def forward(self, x):
         # batch, xyz, time, join, human (32, 3, 300, 17, 2)
@@ -720,20 +781,50 @@ class Model2(nn.Module):
         # print("<l10> x.shape:{}".format(x.shape))
         
         # exit()
-
-        # batch, xyz, time, join (32*2, 256, 75, 17)
-        # N*M,C,T,V
-        c_new = x.size(1)
-        #x = x.view(N, M, c_new, -1)
         
+        # batch*hunman, xyz, time, join (32*2, 256, 75, 17)
         print("<reshape1> x.shape:{}".format(x.shape))
+
+        # # N*M,C,T,V
+        # c_new = x.size(1)
+        # #x = x.view(N, M, c_new, -1)
+        
+        
+        # # batch, human, xyz, time*join (32, 2, 256, 75*17)
+        # x = x.reshape(N, M, c_new, -1)
+        # print("<reshape2> x.shape:{}".format(x.shape))
+        
+        # x = x.mean(3).mean(1)
+        # x = self.drop_out(x)
+        # x = self.fc(x)
+        
+        # human, batch, time, join
+        
+        # [8, 17, 256, 75] batch*human, join, xyz, time
+        x = x.permute(0, 3, 1, 2)
+        print("<in1> x.shape:{}".format(x.shape))
+        
+        c_new = x.size(1)
         x = x.reshape(N, M, c_new, -1)
-        print("<reshape2> x.shape:{}".format(x.shape))
+        x = x.permute(1,0,2,3)
+        print("<in2> x.shape:{}".format(x.shape))
         
-        x = x.mean(3).mean(1)
-        x = self.drop_out(x)
-        x = self.fc(x)
         
+        
+        x1 = x[0]
+        x2 = x[1]
+        print("<in3> x1.shape:{}".format(x1.shape))
+
+        x1 = self._fc1(x1)
+        x1 = self._fc1_2(x1)
+        x2 = self._fc2(x2)
+        x2 = self._fc2_2(x2)
+        print("<self._fc1_2> x1.shape:{} x2.shape:{}".format(x1.shape, x2.shape))
+        
+        output = self.output_decoder(x1, x2)
+        print("<self.output_decoder> output.shape:{}".format(output.shape))
+        
+        print("<out> x.shape:{}".format(x.shape))
         
         exit()
 

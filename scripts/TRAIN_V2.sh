@@ -1,5 +1,5 @@
 #!/bin/bash
-RECORD=2105_
+RECORD=2106
 WORKDIR=work_dir/$RECORD
 MODELNAME=runs/$RECORD
 
@@ -8,7 +8,7 @@ CONFIG=./config/uav-cross-subjectv2/train.yaml
 
 START_EPOCH=70
 EPOCH_NUM=100
-BATCH_SIZE=4
+BATCH_SIZE=16
 WARM_UP=5
 SEED=777
 
