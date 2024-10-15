@@ -711,11 +711,6 @@ class Model2(nn.Module):
         # batch, xyz, time, join (32*2, 128, 150, 17)
         # print("<l5> x.shape:{}".format(x.shape))
         
-        # batch, xyz, time, join (32*2, 256, 75, 17)
-        x_1 = x.clone()
-        x_1 = self.l5_(x_1)
-        
-        
         x = self.l6(x)
         x = self.l7(x)
         x = self.l8(x)
@@ -723,9 +718,6 @@ class Model2(nn.Module):
         x = self.l10(x)
         # batch, xyz, time, join (32*2, 256, 75, 17)
         # print("<l10> x.shape:{}".format(x.shape))
-        
-        x = x + x_1
-        # print("<l10_behind> x.shape:{}".format(x.shape))
         
         # exit()
 
