@@ -729,6 +729,7 @@ class Model2(nn.Module):
         
         # exit()
 
+        # batch, xyz, time, join (32*2, 256, 75, 17)
         # N*M,C,T,V
         c_new = x.size(1)
         #x = x.view(N, M, c_new, -1)
