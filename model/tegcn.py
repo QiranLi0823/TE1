@@ -734,6 +734,7 @@ class Model2(nn.Module):
         x = self.drop_out(x)
         x = self.fc(x)
         
+        
         exit()
 
         return x
