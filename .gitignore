@@ -1,12 +1,13 @@
 # Created by .ignore support plugin (hsz.mobi)
 data/
 runs/
-work_dir/
+# work_dir/
 *.swp
 
 .idea/
 runs/
-work_dir/
+# work_dir/
+*.npy
 
 ### Python template
 # Byte-compiled / optimized / DLL files
